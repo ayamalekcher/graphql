@@ -1,32 +1,33 @@
 package com.example.graphql_service.service;
 
+import com.example.graphql_service.model.Course;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class CourseServiceClient {
 
-    private final WebClient webClient;
+    private final WebClient courseWebClient;
 
     public CourseServiceClient(WebClient courseWebClient) {
-        this.webClient = courseWebClient;
+        this.courseWebClient = courseWebClient;
     }
 
-    public List<Map<String, Object>> getAllCourses() {
-        return webClient.get()
-                .uri("/courses")
+    public List<Course> getAllCourses() {
+        return courseWebClient.get()
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(Course.class)
+                .collectList()
                 .block();
     }
 
-    public Map<String, Object> getCourseById(Long id) {
-        return webClient.get()
-                .uri("/courses/{id}", id)
+    public Course getCourseById(Long id) {
+        return courseWebClient.get()
+                .uri("/{id}", id)
                 .retrieve()
-                .bodyToMono(Map.class)
+                .bodyToMono(Course.class)
                 .block();
     }
 }
