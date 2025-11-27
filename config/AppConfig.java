@@ -14,14 +14,14 @@ public class AppConfig {
     @Value("${graphql.courses.url}")
     private String coursesUrl;
 
-    @Bean
+    @Bean(name = "studentWebClient")
     public WebClient studentWebClient() {
         return WebClient.builder()
                 .baseUrl(studentsUrl)
                 .build();
     }
 
-    @Bean
+    @Bean(name = "courseWebClient")
     public WebClient courseWebClient() {
         return WebClient.builder()
                 .baseUrl(coursesUrl)
