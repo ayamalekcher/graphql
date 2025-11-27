@@ -1,8 +1,8 @@
 package com.example.graphql_service.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
@@ -10,19 +10,23 @@ import java.util.Map;
 @Service
 public class StudentServiceClient {
 
-    @Value("${student.service.url}")
-    private String studentServiceUrl; // = http://localhost:8888/student/getAll
-
-    private final RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private WebClient studentWebClient;
 
     public List<Map<String, Object>> getAllStudents() {
-        // هذا endpoint يرجع جميع الطلاب
-        return restTemplate.getForObject(studentServiceUrl, List.class);
+        return studentWebClient.get()
+                .uri("/students")
+                .retrieve()
+                .bodyToFlux(Map.class)
+                .collectList()
+                .block();
     }
 
     public Map<String, Object> getStudentById(Long id) {
-        // هذا endpoint خاص بطالب واحد
-        String baseUrl = studentServiceUrl.replace("/getAll", ""); // نحيد /getAll باش نستعمل /{id}
-        return restTemplate.getForObject(baseUrl + "/" + id, Map.class);
+        return studentWebClient.get()
+                .uri("/students/" + id)
+                .retrieve()
+                .bodyToMono(Map.class)
+                .block();
     }
 }
