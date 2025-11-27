@@ -13,7 +13,8 @@ import java.util.Map;
 @Service
 public class CourseServiceClient {
 
-    @Value("${course.service.url}")
+    @Value("${graphql.courses.url}")
+
     private String courseServiceUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
