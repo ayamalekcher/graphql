@@ -15,6 +15,7 @@ public class AppConfig {
     @Value("${graphql.courses.url}")
     private String coursesUrl;
 
+    // Bean pour le WebClient des étudiants
     @Bean
     @Qualifier("studentWebClient")
     public WebClient studentWebClient() {
@@ -23,6 +24,7 @@ public class AppConfig {
                 .build();
     }
 
+    // Bean pour le WebClient des cours
     @Bean
     @Qualifier("courseWebClient")
     public WebClient courseWebClient() {
