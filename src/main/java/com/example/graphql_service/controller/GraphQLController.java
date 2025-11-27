@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import java.util.HashMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +20,6 @@ public class GraphQLController {
     @Autowired
     private CourseServiceClient courseClient;
 
-    // --- Queries pour les étudiants ---
     @QueryMapping
     public List<Map<String, Object>> students() {
         return studentClient.getAllStudents();
@@ -31,7 +30,6 @@ public class GraphQLController {
         return studentClient.getStudentById(id);
     }
 
-    // --- Queries pour les cours ---
     @QueryMapping
     public List<Map<String, Object>> courses() {
         return courseClient.getAllCourses();
@@ -42,23 +40,16 @@ public class GraphQLController {
         return courseClient.getCourseById(id);
     }
 
-
     @QueryMapping
-public Map<String, Object> studentCourses(@Argument Long id) {
-    Map<String, Object> response = new HashMap<>();
+    public Map<String, Object> studentCourses(@Argument Long id) {
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> student = studentClient.getStudentById(id);
+        response.put("student", student);
 
-    // 1️⃣ نجيب بيانات الطالب من Student Service
-    Map<String, Object> student = studentClient.getStudentById(id);
-    response.put("student", student);
+        // Pour l'instant on récupère tous les cours
+        List<Map<String, Object>> courses = courseClient.getAllCourses();
+        response.put("courses", courses);
 
-    // 2️⃣ نجيب قائمة الكورسات لي هو فيها من Django (course service)
-    // نقدر نجيبها من endpoint خاص أو كامل وندير filtrage
-    List<Map<String, Object>> courses = courseClient.getAllCourses();
-
-    // في الحالة البسيطة، نخليهم كامل (باش يكون demo)
-    response.put("courses", courses);
-
-    return response;
-}
-
+        return response;
+    }
 }

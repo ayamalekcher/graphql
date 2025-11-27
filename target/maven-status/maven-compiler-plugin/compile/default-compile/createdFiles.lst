@@ -1,4 +1,8 @@
 com\example\graphql_service\service\CourseServiceClient.class
+com\example\graphql_service\service\StudentServiceClient$2.class
 com\example\graphql_service\controller\GraphQLController.class
+com\example\graphql_service\service\CourseServiceClient$1.class
+com\example\graphql_service\service\CourseServiceClient$2.class
 com\example\graphql_service\GraphqlServiceApplication.class
+com\example\graphql_service\service\StudentServiceClient$1.class
 com\example\graphql_service\service\StudentServiceClient.class

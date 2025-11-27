@@ -27,5 +27,5 @@ jobs:
       - name: Deploy to Render
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          service-id: ${{ secrets.srv-d4k6rovpm1nc73afle8g}}
+          service-id: ${{ secrets.dpg-d4kbvcgdl3ps73dh7ff0-a}}
           api-key: ${{ secrets.projectgraphql }}
