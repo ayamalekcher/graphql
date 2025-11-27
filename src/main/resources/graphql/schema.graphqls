@@ -1,0 +1,29 @@
+type Student {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+type Course {
+  id: ID!
+  name: String!
+  instructor: String!
+  category: String
+  schedule: String
+}
+
+type Query {
+  students: [Student]
+  studentById(id: ID!): Student
+  courses: [Course]
+  courseById(id: ID!): Course
+}
+type StudentCourses {
+  student: Student
+  courses: [Course]
+}
+
+extend type Query {
+  studentCourses(id: ID!): StudentCourses
+}
