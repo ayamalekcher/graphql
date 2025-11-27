@@ -1,11 +1,10 @@
 package com.example.graphql_service.service;
 
+import com.example.graphql_service.model.Student;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StudentServiceClient {
@@ -16,19 +15,19 @@ public class StudentServiceClient {
         this.webClient = webClient;
     }
 
-    public List<Map<String, Object>> getAllStudents() {
+    public List<Student> getAllStudents() {
         return webClient.get()
-                .uri("/students")
                 .retrieve()
-                .bodyToMono(List.class)
+                .bodyToFlux(Student.class)
+                .collectList()
                 .block();
     }
 
-    public Map<String, Object> getStudentById(Long id) {
+    public Student getStudentById(Long id) {
         return webClient.get()
-                .uri("/students/{id}", id)
+                .uri("/{id}", id)
                 .retrieve()
-                .bodyToMono(Map.class)
+                .bodyToMono(Student.class)
                 .block();
     }
 }
