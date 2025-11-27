@@ -1,19 +1,25 @@
-# Base image
-FROM eclipse-temurin:17-jdk
+# Step 1: Base image with JDK 17 and Maven
+FROM maven:3.9.2-eclipse-temurin-17 AS build
 
-# Set working directory
+# Step 2: Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY . .
+# Step 3: Copy project files
+COPY pom.xml .
+COPY src ./src
 
-# Build project
-RUN ./mvnw clean package -DskipTests
+# Step 4: Build the project (skip tests)
+RUN mvn clean package -DskipTests
 
-# Copy jar
-COPY target/*.jar app.jar
+# Step 5: Second stage: smaller runtime image
+FROM eclipse-temurin:17-jdk
 
-# Expose port
+WORKDIR /app
+
+# Copy jar from the build stage
+COPY --from=build /app/target/*.jar app.jar
+
+# Expose the port
 EXPOSE 4000
 
 # Run the application
