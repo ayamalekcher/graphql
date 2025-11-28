@@ -37,19 +37,11 @@ public class GraphQLController {
     }
 
     @QueryMapping
-    public Course courseById(@Argument Long id) {
-        return courseClient.getCourseById(id);
-    }
-
-    @QueryMapping
     public Map<String, Object> studentCourses(@Argument Long id) {
         Map<String, Object> response = new HashMap<>();
         Student student = studentClient.getStudentById(id);
         response.put("student", student);
-
-        List<Course> courses = courseClient.getAllCourses(); // ici tu peux filtrer si tu as un endpoint de cours par étudiant
-        response.put("courses", courses);
-
+        response.put("courses", courseClient.getAllCourses());
         return response;
     }
 }

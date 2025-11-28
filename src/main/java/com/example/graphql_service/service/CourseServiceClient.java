@@ -1,33 +1,39 @@
 package com.example.graphql_service.service;
 
 import com.example.graphql_service.model.Course;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class CourseServiceClient {
 
-    private final WebClient webClient;
+    private final RestTemplate restTemplate;
 
-    public CourseServiceClient(@Qualifier("courseWebClient") WebClient webClient) {
-        this.webClient = webClient;
+    @Value("${course.service.url}")
+    private String courseUrl;
+
+    public CourseServiceClient(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     public List<Course> getAllCourses() {
-        return webClient.get()
-                .retrieve()
-                .bodyToFlux(Course.class)
-                .collectList()
-                .block();
+        try {
+            ResponseEntity<Course[]> response =
+                    restTemplate.getForEntity(courseUrl, Course[].class);
+            Course[] courses = response.getBody();
+            return courses != null ? Arrays.asList(courses) : Collections.emptyList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 
     public Course getCourseById(Long id) {
-        return webClient.get()
-                .uri("/{id}", id)
-                .retrieve()
-                .bodyToMono(Course.class)
-                .block();
+        return null; // غير مدعوم حاليا
     }
 }
