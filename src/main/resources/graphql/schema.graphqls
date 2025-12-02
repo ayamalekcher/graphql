@@ -27,3 +27,22 @@ type StudentCourses {
 extend type Query {
   studentCourses(id: ID!): StudentCourses
 }
+# Types جدد
+type Event {
+  id: ID!
+  title: String!
+  date: String!
+  location: String
+}
+
+type University {
+  id: ID!
+  name: String!
+  location: String
+}
+
+# تحديث Query باش ترجع events و universities
+extend type Query {
+  events: [Event]
+  universities: [University]
+}
